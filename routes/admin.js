@@ -29,12 +29,12 @@ router.get("/users", adminAuthMiddleware, async (req, res) => {
         res.status(200).json(filteredUsers);
     }
     catch(err) {
-        console.error("Error fetching users data: ", err.message);
-        res.status(500).send("Failed to fetch users");
+        console.error("Users data fetch failed: ", err.message);
+        res.status(500).send("Failed to fetch users data");
     }
 });
 
-router.post("/verify-users", adminAuthMiddleware, async (req, res) => {
+router.post("/verify-user", adminAuthMiddleware, async (req, res) => {
     const { userId } = req.body;
 
     if(!userId) {
@@ -52,12 +52,12 @@ router.post("/verify-users", adminAuthMiddleware, async (req, res) => {
         res.status(200).send(updatedUser);
     }
     catch(err) {
-        console.error("User verification Error: ", err.message);
+        console.error("User Verification Error: ", err.message);
         res.status(500).send("An error occurred during user verification");
     }
 });
 
-router.post("/users/:userId", adminAuthMiddleware, async (req, res) => {
+router.delete("/users/:userId", adminAuthMiddleware, async (req, res) => {
     const { userId } = req.params;
 
     if(!userId) {
@@ -71,7 +71,7 @@ router.post("/users/:userId", adminAuthMiddleware, async (req, res) => {
         res.status(200).send(deletedUser);
     }
     catch(err) {
-        console.error("User deletion Error: ", err.message);
+        console.error("User Deletion Error: ", err.message);
         res.status(500).send("An error occurred while attempting to delete user");
     }
 });
