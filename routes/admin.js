@@ -13,7 +13,7 @@ router.get("/users", async (req, res) => {
             const data = {
                 id: user.id,
                 username: user.username,
-                email: user.email_addresses[0]?.email_adress,
+                email: user.email_addresses[0]?.email_address,
                 created_at: user.created_at,
                 image: user.image_url,
                 status: user.public_metadata?.status || "unknown",
