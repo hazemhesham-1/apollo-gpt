@@ -10,20 +10,22 @@ router.get("/users", adminAuthMiddleware, async (req, res) => {
         const response = await axios.get("https://api.clerk.com/v1/users", { headers: clerkHeaders });
         const users = response.data;
 
-        function filterData(user) {
+        function formatData(user) {
             const data = {
                 id: user.id,
                 username: user.username,
                 email: user.email_addresses[0]?.email_address,
                 created_at: user.created_at,
                 image: user.image_url,
+                role: user.public_metadata?.role || "user",
                 status: user.public_metadata?.status || "unknown",
             };
 
             return data;
         }
 
-        const filteredUsers = users.map((user) => filterData(user));
+        const formattedUsers = users.map((user) => formatData(user));
+        const filteredUsers = formattedUsers.filter((user) => user.role !== "admin");
         res.status(200).json(filteredUsers);
     }
     catch(err) {
