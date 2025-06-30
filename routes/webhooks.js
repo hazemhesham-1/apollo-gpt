@@ -14,8 +14,10 @@ router.post("/webhook", async (req, res) => {
     const userId = event.data.id;
     try {
         const patchData = {
-            role: "student",
-            public_metadata: { status: "pending" },
+            public_metadata: {
+                status: "pending",
+                role: "student"
+            },
         };
 
         const response = await axios.patch(`https://api.clerk.com/v1/users/${userId}`, patchData, { headers: clerkHeaders });

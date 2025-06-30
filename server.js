@@ -2,6 +2,8 @@ const express = require("express");
 const http = require("http");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+
+const { ClerkExpressWithAuth } = require("@clerk/clerk-sdk-node");
 const { Server } = require("socket.io");
 
 const adminRoutes = require("./routes/admin");
@@ -11,6 +13,7 @@ const handleChatSocket = require("./sockets/chatSocket");
 
 const app = express();
 app.use(cors());
+app.use(ClerkExpressWithAuth());
 app.use(bodyParser.json());
 
 app.use("/admin", adminRoutes);
