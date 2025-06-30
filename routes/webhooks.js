@@ -28,3 +28,5 @@ router.post("/webhook", async (req, res) => {
         res.status(500).send("Failed to process user information");
     }
 });
+
+module.exports = router;

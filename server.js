@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const { Server } = require("socket.io");
 
 const adminRoutes = require("./routes/admin");
+const webhookRoutes = require("./routes/webhooks");
 
 const handleChatSocket = require("./sockets/chatSocket");
 
@@ -13,6 +14,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use("/admin", adminRoutes);
+app.use("/clerk", webhookRoutes);
 
 const server = http.createServer(app);
 const io = new Server(server, {
