@@ -67,8 +67,8 @@ router.delete("/users/:userId", adminAuthMiddleware, async (req, res) => {
     try {
         const response = await axios.delete(`https://api.clerk.com/v1/users/${userId}`, { headers: clerkHeaders });
         const deletedUser = response.data;
-
-        res.status(200).send(formatData(deletedUser));
+        
+        res.status(200).send(deletedUser);
     }
     catch(err) {
         console.error("User Deletion Error: ", err.message);
