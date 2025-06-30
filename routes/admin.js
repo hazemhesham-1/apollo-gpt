@@ -20,7 +20,7 @@ router.get("/users", adminAuthMiddleware, async (req, res) => {
                 role: user.public_metadata?.role || "user",
                 status: user.public_metadata?.status || "unknown",
             };
-
+            
             return data;
         }
 
