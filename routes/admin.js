@@ -12,6 +12,7 @@ function formatData(user) {
         email: user.email_addresses[0]?.email_address,
         created_at: user.created_at,
         image: user.image_url,
+        balance: user.public_metadata?.balance || 0,
         role: user.public_metadata?.role || "user",
         status: user.public_metadata?.status || "unknown",
     };
@@ -34,6 +35,36 @@ router.get("/users", adminAuthMiddleware, async (req, res) => {
     }
 });
 
+router.post("/update-balance", adminAuthMiddleware, async (req, res) => {
+    const { balance, userId } = req.body;
+    const parsedBalance = Number(balance);
+
+    if(!userId) {
+        return res.status(400).send("User ID is required");
+    }
+    if(isNaN(parsedBalance)) {
+        return res.status(400).send("Balance must be a valid number");
+    }
+    else if(parsedBalance < 0) {
+        return res.status(400).send("Balance cannot be a negative number");
+    }
+
+    try {
+        const patchData = {
+            public_metadata: { balance: parsedBalance, role: "student", status: "verified" }
+        };
+
+        const response = await axios.patch(`https://api.clerk.com/v1/users/${userId}`, patchData, { headers: clerkHeaders });
+        const updatedUser = response.data;
+
+        res.status(200).send(formatData(updatedUser));
+    }
+    catch(err) {
+        console.error("Balance Update Error: ", err.message);
+        res.status(500).send("An internal error occurred while updating the balance");
+    }
+});
+
 router.post("/verify-user", adminAuthMiddleware, async (req, res) => {
     const { userId } = req.body;
 
@@ -43,7 +74,7 @@ router.post("/verify-user", adminAuthMiddleware, async (req, res) => {
 
     try {
         const patchData = {
-            public_metadata: { role: "student", status: "verified" },
+            public_metadata: { balance: 10, role: "student", status: "verified" }
         };
 
         const response = await axios.patch(`https://api.clerk.com/v1/users/${userId}`, patchData, { headers: clerkHeaders });

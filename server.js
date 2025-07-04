@@ -7,6 +7,7 @@ const { ClerkExpressWithAuth } = require("@clerk/clerk-sdk-node");
 const { Server } = require("socket.io");
 
 const adminRoutes = require("./routes/admin");
+const userRoutes = require("./routes/user");
 const webhookRoutes = require("./routes/webhooks");
 
 const handleChatSocket = require("./sockets/chatSocket");
@@ -17,6 +18,7 @@ app.use(ClerkExpressWithAuth());
 app.use(bodyParser.json());
 
 app.use("/admin", adminRoutes);
+app.use("/user", userRoutes);
 app.use("/clerk", webhookRoutes);
 
 const server = http.createServer(app);
